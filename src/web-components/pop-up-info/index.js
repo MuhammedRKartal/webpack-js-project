@@ -1,15 +1,24 @@
-class CurrentDate extends HTMLElement {
-  // The browser calls this method when the element is
-  // added to the DOM.
-  connectedCallback() {
-    // Create a Date object representing the current date.
-    const now = new Date();
+import styles from "./modal.styles.scss";
 
-    // Format the date to a human-friendly string, and set the
-    // formatted date as the text content of this element.
-    this.textContent = now.toLocaleDateString();
+class Pop extends HTMLElement {
+  constructor() {
+    super();
+
+    const template = document.getElementById("modal");
+    const templateContent = template.content;
+
+    const style = document.createElement("style");
+    style.textContent = styles;
+
+    const shadowRoot = this.attachShadow({ mode: "open" });
+
+    const paragraph = document.createElement("p");
+    paragraph.innerHTML =
+      "Here is some blue text with some <span> pink </span>";
+
+    shadowRoot.appendChild(style);
+    shadowRoot.appendChild(paragraph);
   }
 }
 
-// Register the CurrentDate component using the tag name <current-date>.
-customElements.define("current-date", CurrentDate);
+customElements.define("pop", Pop);

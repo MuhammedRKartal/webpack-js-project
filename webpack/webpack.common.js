@@ -9,7 +9,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const common = {
   entry: {
-    bundle: path.resolve(__dirname, "../src/index.js"),
+    app: path.resolve(__dirname, "../src/index.js"),
     webComponents: {
       import: path.resolve(__dirname, "../src/web-components/modal/index.js"),
       filename: "wc/modal.js",
@@ -27,7 +27,9 @@ const common = {
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, "../src/index.html"),
     }),
-    new MiniCssExtractPlugin(),
+    new MiniCssExtractPlugin({
+      filename: "css/[name].css",
+    }),
   ],
   module: {
     rules: [
@@ -74,12 +76,13 @@ const common = {
 };
 
 function babelLoader(browserslist) {
+  console.log(babelConfig);
   if (browserslist) {
     babelConfig.presets[0][1].targets = browserslist;
   }
 
   return {
-    test: /\.js$/,
+    test: /\.(js|jsx)$/,
     exclude: (modulePath) => {
       return /node_modules/.test(modulePath);
     },
