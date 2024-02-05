@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "baseUrl": ".",
+    "baseUrl": "../",
     "moduleResolution": "node"
   },
   "exclude": ["node_modules"]

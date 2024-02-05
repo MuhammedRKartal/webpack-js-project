@@ -9,11 +9,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const common = {
   entry: {
-    app: path.resolve(__dirname, "../src/index.js"),
-    webComponents: {
-      import: path.resolve(__dirname, "../src/web-components/modal/index.js"),
-      filename: "wc/modal.js",
-    },
+    app: path.resolve(__dirname, "../src/layout/index.js"),
   },
   output: {
     filename: "[name].js",
@@ -25,7 +21,7 @@ const common = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, "../src/index.html"),
+      template: path.resolve(__dirname, "../src/layout/index.html"),
     }),
     new MiniCssExtractPlugin({
       filename: "css/[name].css",
@@ -76,7 +72,6 @@ const common = {
 };
 
 function babelLoader(browserslist) {
-  console.log(babelConfig);
   if (browserslist) {
     babelConfig.presets[0][1].targets = browserslist;
   }

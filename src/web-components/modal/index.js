@@ -71,35 +71,15 @@ export default class Modal extends HTMLElement {
     modal.dismiss();
   };
 
-  createModalButton = ({
-    text,
-    appearance = "filled",
-    classList = [],
-    onClick = () => {},
-  }) => {
+  createModalButton = ({ text, classList = [], onClick = () => {} }) => {
     const button = document.createElement("button");
 
     button.innerHTML = text;
     button.classList.add("modal-button", ...classList);
-    button.appearance = appearance;
-    button.size = "xl";
 
     button.addEventListener("click", onClick);
 
     return button;
-  };
-
-  getModalButtons = () => {
-    const fragment = document.createDocumentFragment();
-    const closeButton = this.createModalButton({
-      text: trans.close,
-      appearance: "outlined",
-      classList: ["js-close-button"],
-    });
-
-    fragment.appendChild(closeButton);
-
-    return fragment.childNodes;
   };
 
   connectedCallback() {
@@ -112,6 +92,8 @@ export default class Modal extends HTMLElement {
           <button class="close-button js-close-button"></pz-button>
         </header>
         <div class="k-modal-dialog__content">${this.innerHTML}</div>
+        <template id="popup"></template>
+        <custom-popup></custom-popup>
       </div>
     `;
 

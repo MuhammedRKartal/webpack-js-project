@@ -1,10 +1,10 @@
-import styles from "./modal.styles.scss";
+import styles from "./pop.styles.scss";
 
-class Pop extends HTMLElement {
+export default class PopUp extends HTMLElement {
   constructor() {
     super();
 
-    const template = document.getElementById("modal");
+    const template = document.getElementById("popup");
     const templateContent = template.content;
 
     const style = document.createElement("style");
@@ -20,5 +20,4 @@ class Pop extends HTMLElement {
     shadowRoot.appendChild(paragraph);
   }
 }
-
-customElements.define("pop", Pop);
+customElements.define("custom-popup", PopUp);
