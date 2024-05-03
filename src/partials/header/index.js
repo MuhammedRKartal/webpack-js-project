@@ -1,17 +1,15 @@
-export default class Header extends HTMLElement {
+class Header {
   constructor() {
-    super();
-    this.createHeader();
+    this.element = createHeaderElement();
   }
-
-  createHeader = () => {
-    const header = document.createElement("div");
-    header.className = "header";
-
-    const headerMenu = document.createElement("k-modal");
-
-    header.appendChild(headerMenu);
-  };
 }
 
-customElements.define("header-menu", Header);
+function createHeaderElement() {
+  const header = document.createElement("header");
+  const heading = document.createElement("h1");
+  heading.textContent = "My Header";
+  header.appendChild(heading);
+  return header;
+}
+
+export default Header;

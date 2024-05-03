@@ -1,14 +1,21 @@
 import "./style.scss";
 import Router from "./router.js";
+import Header from "../partials/header/index.js";
+import ProductModal from "../partials/product-modal/index.js";
 
 function component() {
   Router();
-  const element = document.createElement("div");
+  const header = new Header();
+  const main = document.createElement("main");
+  main.appendChild(header.element);
 
-  element.innerHTML = "Canim karim";
-  element.classList.add("kartal");
+  const modalProps = {
+    title: "This is my modal",
+    content: "<div>Hiello</div>",
+  };
+  new ProductModal(modalProps, main);
 
-  return element;
+  return main;
 }
 
 document.body.appendChild(component());

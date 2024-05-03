@@ -1,7 +1,9 @@
-import "./modal.scss";
 export default class Modal extends HTMLElement {
   constructor() {
     super();
+
+    // Create a Shadow DOM and attach it to the element
+    this.attachShadow({ mode: "open" });
   }
 
   get type() {
@@ -36,7 +38,8 @@ export default class Modal extends HTMLElement {
     const visibleClassName = "-visible";
 
     this.classList.remove(visibleClassName);
-    document.querySelector("html").style.overflow = "auto";
+    this.shadowRoot.host.getRootNode().querySelector("html").style.overflow =
+      "auto";
     this.dispatchEvent(new Event("dismiss"));
   };
 
@@ -64,13 +67,6 @@ export default class Modal extends HTMLElement {
     modal.show();
   };
 
-  onCloseButtonClick = (event) => {
-    const button = event.currentTarget;
-    const modal = button.closest("k-modal");
-
-    modal.dismiss();
-  };
-
   createModalButton = ({ text, classList = [], onClick = () => {} }) => {
     const button = document.createElement("button");
 
@@ -83,25 +79,93 @@ export default class Modal extends HTMLElement {
   };
 
   connectedCallback() {
-    const templateHtml = `
+    const template = document.createElement("template");
+
+    template.innerHTML = `
+      <style>
+      :host {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+      }
+
+      :host(.-visible) {
+        display: block;
+      }
+
+      .k-modal {
+        display: none;
+        top: 0;
+        left: 0;
+        background-color: black;
+        opacity: 0.5;
+        width: 100%;
+        height: 100%;
+        max-height: 0px;
+        z-index: 40;
+        position: fixed;
+      }
+
+      .k-modal.-visible {
+        display: block;
+        max-height: 100%;
+        transform: translateY(0);
+      }
+
+      .k-modal-dialog {
+        min-width: 40%;
+        min-height: 25%;
+        transform: translateY(-50%);
+        transition-duration: 300ms;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      }
+
+      .k-modal-dialog__header .title{
+        font-size:18px;
+        margin-bottom:10p;
+        margin-top: -10px;
+      }
+
+      .close-button {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        position: absolute;
+        top: 0;
+        right: 0;
+      }
+      </style>
+
       <div class="k-modal-dialog">
         <header class="k-modal-dialog__header">
-          ${
-            this.modalTitle ? <span class="title">${this.modalTitle}</span> : ""
-          }
-          <button class="close-button js-close-button"></pz-button>
+          ${this.modalTitle ? `<h1 class="title">${this.modalTitle}</h1>` : ""}
+          <button class="close-button js-close-button">×</button>
         </header>
-        <div class="k-modal-dialog__content">${this.innerHTML}</div>
-        <template id="popup"></template>
-        <custom-popup></custom-popup>
+        <div class="k-modal-dialog__content">
+          ${this.innerHTML}
+        </div>
       </div>
     `;
 
-    this.innerHTML = templateHtml;
+    this.shadowRoot.appendChild(template.content.cloneNode(true));
 
-    this.querySelectorAll(".js-close-button").forEach((button) =>
-      button.addEventListener("click", this.onCloseButtonClick)
-    );
+    // Attach event listeners within the Shadow DOM
+    this.shadowRoot.querySelectorAll(".js-close-button").forEach((button) => {
+      button.addEventListener("click", () => this.dismiss());
+    });
   }
 }
 
