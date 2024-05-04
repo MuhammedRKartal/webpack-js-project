@@ -1,4 +1,4 @@
-export default class ProductModal {
+export default class Popper {
   constructor(props) {
     const {
       title,

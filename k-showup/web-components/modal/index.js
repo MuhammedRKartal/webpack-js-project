@@ -206,7 +206,7 @@ export default class Modal extends HTMLElement {
       const modalWithoutShadowRoot = this.getContentHTML();
       this.innerHTML = modalWithoutShadowRoot;
       if (this.enableStyles === "true") {
-        import("./modal.scss");
+        import("./modal.scss", { mode: "preload" });
         this.classList.add("k-modal");
       }
 

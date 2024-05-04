@@ -1,7 +1,7 @@
 import "./style.scss";
 import Router from "./router.js";
 import Header from "../partials/header/index.js";
-import ProductModal from "../partials/popper/index.js";
+import KShowUp from "../../k-showup/index.js";
 
 function component() {
   Router();
@@ -17,8 +17,9 @@ function component() {
     enableStyles: true,
   };
 
-  const modal = new ProductModal(modalProps);
-  main.appendChild(modal.init());
+  const modal = new KShowUp(modalProps);
+  modal.createPopperInstance();
+  modal.initializeModalPack();
 
   return main;
 }
