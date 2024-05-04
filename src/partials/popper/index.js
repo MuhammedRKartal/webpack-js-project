@@ -1,10 +1,23 @@
 export default class ProductModal {
   constructor(props) {
-    this.title = props.title;
-    this.wrapperId = props.wrapperId;
-    this.content = props.content;
-    this.modalStyles = props.modalStyles;
-    this.useShadowRoot = props.useShadowRoot;
+    const {
+      title,
+      wrapperId,
+      content,
+      modalStyles,
+      useShadowRoot,
+      enableStyles,
+      buttonText,
+    } = props;
+
+    this.title = title;
+    this.wrapperId = wrapperId;
+    this.content = content;
+    this.modalStyles = modalStyles;
+    this.useShadowRoot = useShadowRoot;
+    this.enableStyles = enableStyles;
+    this.buttonText = buttonText || "Click Me";
+
     this.modal = null;
     this.modalContent = null;
     this.modalPopUpButton = null;
@@ -42,6 +55,7 @@ export default class ProductModal {
       modalTitle: this.title || "",
       styles: this.modalStyles,
       useShadowRoot: this.useShadowRoot,
+      enableStyles: this.enableStyles,
     });
 
     return modal;
@@ -49,13 +63,13 @@ export default class ProductModal {
 
   createModalContent() {
     const modalContent = document.createElement("template");
-    modalContent.innerHTML = this.content || "Modal Content";
+    modalContent.innerHTML = this.content;
     return modalContent;
   }
 
   createModalPopUpButton() {
     const modalPopUpButton = document.createElement("button");
-    modalPopUpButton.innerText = "Click Me";
+    modalPopUpButton.innerText = this.buttonText;
     modalPopUpButton.addEventListener("click", () => {
       this.show();
     });

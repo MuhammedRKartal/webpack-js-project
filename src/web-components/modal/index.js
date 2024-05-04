@@ -1,9 +1,7 @@
-import styles from "./modal.styles.scss";
-import "./modal.scss";
-
 export default class Modal extends HTMLElement {
   constructor() {
     super();
+    this.visiblestyles = "-visible";
   }
 
   get styles() {
@@ -34,38 +32,104 @@ export default class Modal extends HTMLElement {
     this.setAttribute("use-shadow-root", value);
   }
 
-  show = () => {
-    const visiblestyles = "-visible";
-    this.classList.add(visiblestyles);
+  get enableStyles() {
+    return this.getAttribute("enable-styles");
+  }
+
+  set enableStyles(value) {
+    this.setAttribute("enable-styles", value);
+  }
+
+  defaultStyles() {
+    return `:host {
+      display: none;
+      width: 100%;
+      height: 100%;
+      max-height: 0px;
+    }
+    :host::before {
+      background-color: #000;
+      opacity: 0.5;
+      content: "";
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 40;
+      position: fixed;
+    }
+    :host(.-visible) {
+      display: block;
+    }
+    .k-modal {
+      display: none;
+      width: 100%;
+      height: 100%;
+      max-height: 0px;
+      top: 0;
+      left: 0;
+      position: fixed;
+    }
+    .k-modal::before {
+      background-color: #000;
+      opacity: 0.5;
+      content: "";
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 40;
+      position: fixed;
+    }
+    .k-modal.-visible {
+      display: block;
+      max-height: 100%;
+      transform: translateY(0);
+    }
+    .k-modal-dialog {
+      min-width: 40%;
+      min-height: 25%;
+      transform: translateY(-50%);
+      transition-duration: 300ms;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      z-index: 50;
+      opacity: 1;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+    .k-modal-dialog__header .title {
+      font-size: 18px;
+      margin-bottom: 10px;
+      margin-top: -10px;
+    }
+    .close-button {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+    `;
+  }
+
+  show() {
+    this.classList.add(this.visiblestyles);
     document.querySelector("html").style.overflow = "hidden";
     this.dispatchEvent(new Event("show"));
-  };
+  }
 
-  dismiss = () => {
-    const visiblestyles = "-visible";
-    this.classList.remove(visiblestyles);
+  dismiss() {
+    this.classList.remove(this.visiblestyles);
     this.getRootNode().querySelector("html").style.overflow = "auto";
     this.dispatchEvent(new Event("dismiss"));
-  };
-
-  static show = () => {
-    const modal = document.createElement("k-modal");
-    document.body.appendChild(modal);
-    modal.querySelectorAll(".js-close-button").forEach((button) =>
-      button.addEventListener("click", () => {
-        modal.remove();
-      })
-    );
-    modal.show();
-  };
-
-  createModalButton = ({ text, classList = [], onClick = () => {} }) => {
-    const button = document.createElement("button");
-    button.innerHTML = text;
-    button.classList.add("modal-button", ...classList);
-    button.addEventListener("click", onClick);
-    return button;
-  };
+  }
 
   getRealDOMContentHTML() {
     const modalWithoutShadowRoot = `
@@ -121,7 +185,7 @@ export default class Modal extends HTMLElement {
 
   generateStyles() {
     const style = document.createElement("style");
-    style.textContent = styles;
+    style.textContent = this.defaultStyles();
     return style;
   }
 
@@ -129,7 +193,9 @@ export default class Modal extends HTMLElement {
     if (this.useShadowRoot === "true") {
       this.attachShadow({ mode: "open" });
 
-      this.shadowRoot.appendChild(this.generateStyles());
+      if (this.enableStyles === "true") {
+        this.shadowRoot.appendChild(this.generateStyles());
+      }
 
       const template = document.createElement("template");
       template.innerHTML = this.getContentHTML();
@@ -139,7 +205,10 @@ export default class Modal extends HTMLElement {
     } else {
       const modalWithoutShadowRoot = this.getContentHTML();
       this.innerHTML = modalWithoutShadowRoot;
-      this.classList.add("k-modal");
+      if (this.enableStyles === "true") {
+        import("./modal.scss");
+        this.classList.add("k-modal");
+      }
 
       this.generateModalCloseButton();
     }

@@ -6,26 +6,23 @@
   top: 0;
   left: 0;
   position: fixed;
-
-  &::before {
-    background-color: black;
-    opacity: 0.5;
-    content: "";
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: 40;
-    position: fixed;
-  }
 }
-
+.k-modal::before {
+  background-color: black;
+  opacity: 0.5;
+  content: "";
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 40;
+  position: fixed;
+}
 .k-modal.-visible {
   display: block;
   max-height: 100%;
   transform: translateY(0);
 }
-
 .k-modal-dialog {
   min-width: 40%;
   min-height: 25%;
@@ -42,13 +39,11 @@
   opacity: 1;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
-
 .k-modal-dialog__header .title {
   font-size: 18px;
   margin-bottom: 10px;
   margin-top: -10px;
 }
-
 .close-button {
   background: none;
   border: none;
