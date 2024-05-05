@@ -1,3 +1,5 @@
+import "./modal.scss";
+
 export default class Modal extends HTMLElement {
   constructor() {
     super();
@@ -185,7 +187,11 @@ export default class Modal extends HTMLElement {
 
   generateStyles() {
     const style = document.createElement("style");
-    style.textContent = this.defaultStyles();
+    if (this.enableStyles === "true") {
+      style.textContent = this.defaultStyles();
+    } else {
+      style.textContent = this.styles;
+    }
     return style;
   }
 
@@ -193,9 +199,7 @@ export default class Modal extends HTMLElement {
     if (this.useShadowRoot === "true") {
       this.attachShadow({ mode: "open" });
 
-      if (this.enableStyles === "true") {
-        this.shadowRoot.appendChild(this.generateStyles());
-      }
+      this.shadowRoot.appendChild(this.generateStyles());
 
       const template = document.createElement("template");
       template.innerHTML = this.getContentHTML();
@@ -206,8 +210,9 @@ export default class Modal extends HTMLElement {
       const modalWithoutShadowRoot = this.getContentHTML();
       this.innerHTML = modalWithoutShadowRoot;
       if (this.enableStyles === "true") {
-        import("./modal.scss", { mode: "preload" });
         this.classList.add("k-modal");
+      } else {
+        console.log("here");
       }
 
       this.generateModalCloseButton();

@@ -13,13 +13,22 @@ function component() {
     wrapperId: "my-modal",
     title: "This is my modal",
     content: "<div>Hiello</div>",
-    useShadowRoot: false,
+    useShadowRoot: true,
     enableStyles: true,
+    modalStyles: "font-size:20px", //for shadow dom
+    modalClass: "k-modal2", // for real dom
   };
 
   const modal = new KShowUp(modalProps);
   modal.createPopperInstance();
-  modal.initializeModalPack();
+  modal.initializeModal();
+  const instance = modal.getPopperInstance();
+  const tB = document.createElement("button");
+  tB.innerText = "Button";
+  tB.addEventListener("click", () => {
+    instance.show();
+  });
+  main.appendChild(tB);
 
   return main;
 }

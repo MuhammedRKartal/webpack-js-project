@@ -5,6 +5,7 @@ export default class Popper {
       wrapperId,
       content,
       modalStyles,
+      modalClass,
       useShadowRoot,
       enableStyles,
       buttonText,
@@ -14,6 +15,7 @@ export default class Popper {
     this.wrapperId = wrapperId;
     this.content = content;
     this.modalStyles = modalStyles;
+    this.modalClass = modalClass;
     this.useShadowRoot = useShadowRoot;
     this.enableStyles = enableStyles;
     this.buttonText = buttonText || "Click Me";
@@ -54,6 +56,7 @@ export default class Popper {
       id: this.wrapperId,
       modalTitle: this.title || "",
       styles: this.modalStyles,
+      modalClass: this.modalClass,
       useShadowRoot: this.useShadowRoot,
       enableStyles: this.enableStyles,
     });
